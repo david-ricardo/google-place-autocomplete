@@ -1,8 +1,9 @@
-import * as React from 'react';
+import { FC, useState, useRef, useEffect, cloneElement } from 'react';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import GooglePlaces from './GooglePlaces';
 
-const position: google.maps.LatLngLiteral = {
+const initialCenter: google.maps.LatLngLiteral = {
   lat: -6.217939210899108,
   lng: 106.76042740574776,
 };
@@ -381,20 +382,26 @@ const render = (status: Status) => {
   return <p>{status}</p>;
 };
 
-export const GoogleMap: React.FC = () => {
+export const GoogleMap: FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [center, setCenter] = useState<google.maps.LatLngLiteral>(initialCenter);
   removeGoogleFont();
   return (
     <div className="flex h-full max-h-72">
-      <Wrapper apiKey={'AIzaSyAet8Mk1nPvOn_AebLE5ZxXoGejOD8tPzA'} render={render}>
+      <Wrapper
+        apiKey={'AIzaSyAet8Mk1nPvOn_AebLE5ZxXoGejOD8tPzA'}
+        libraries={['places']}
+        render={render}
+      >
         <Map
-          center={position}
-          zoom={10}
+          center={center}
+          zoom={17}
           style={{ flexGrow: '1', height: '100%', minHeight: '50vh' }}
           styles={prefersDarkMode ? darkTheme : theme}
         >
-          <Marker position={position} />
+          <Marker position={center} />
         </Map>
+        <GooglePlaces setCenter={setCenter} />
       </Wrapper>
     </div>
   );
@@ -405,17 +412,17 @@ interface MapProps extends google.maps.MapOptions {
   children?: any;
 }
 
-const Map: React.FC<MapProps> = ({ children, style, ...options }) => {
-  const ref = React.useRef<HTMLDivElement>(null);
-  const [map, setMap] = React.useState<google.maps.Map>();
+const Map: FC<MapProps> = ({ children, style, ...options }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [map, setMap] = useState<google.maps.Map>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current && !map) {
       setMap(new window.google.maps.Map(ref.current, {}));
     }
   }, [ref, map]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (map) {
       map.setOptions(options);
     }
@@ -424,15 +431,15 @@ const Map: React.FC<MapProps> = ({ children, style, ...options }) => {
   return (
     <>
       <div ref={ref} style={style} />
-      {React.cloneElement(children, { map })}
+      {cloneElement(children, { map })}
     </>
   );
 };
 
-const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
-  const [marker, setMarker] = React.useState<google.maps.Marker>();
+const Marker: FC<google.maps.MarkerOptions> = (options) => {
+  const [marker, setMarker] = useState<google.maps.Marker>();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!marker) {
       setMarker(new google.maps.Marker());
     }
@@ -445,7 +452,7 @@ const Marker: React.FC<google.maps.MarkerOptions> = (options) => {
     };
   }, [marker]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (marker) {
       marker.setOptions(options);
     }
