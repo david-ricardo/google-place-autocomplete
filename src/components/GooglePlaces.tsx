@@ -1,4 +1,5 @@
 import { useState, useEffect, memo, Dispatch, FC } from 'react';
+import { Place } from '../types';
 
 const options = {
   fields: ['formatted_address', 'geometry', 'name'],
@@ -16,6 +17,7 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter, setNotFound }: GoogleP
   const [location, setLocation] = useState<google.maps.places.Autocomplete>(
     new google.maps.places.Autocomplete(input, options),
   );
+  const [places, setPlaces] = useState<Place[]>([]);
 
   useEffect(() => {
     if (!location) {
@@ -32,13 +34,25 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter, setNotFound }: GoogleP
           return;
         }
 
-        setCenter({
+        const coordinate = {
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng(),
-        });
+        };
+
+        setCenter(coordinate);
+        setPlaces([
+          ...places,
+          {
+            coordinate,
+            formatted_address: place.formatted_address,
+            name: place.name,
+          },
+        ]);
       });
     }
-  }, [location, setCenter, setNotFound]);
+
+    console.log('places: ', places);
+  }, [location, places, setCenter, setNotFound]);
 
   return null;
 };
