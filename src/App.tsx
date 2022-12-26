@@ -1,7 +1,7 @@
-import React from "react";
-import "./App.css";
-import { GoogleMap } from "./components";
-import { Container, Grid } from "@mui/material";
+import React from 'react';
+import './App.css';
+import { GoogleMap } from './components';
+import { Container, Grid } from '@mui/material';
 
 function App() {
   return (
