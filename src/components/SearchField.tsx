@@ -1,10 +1,15 @@
+import React from 'react';
 import { Paper, InputBase, Divider, IconButton } from '@mui/material';
 import { Menu, Search, Directions } from '@mui/icons-material';
 
-export const SearchField = () => {
+interface SearchFieldProps {
+  toggleMenu: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
+}
+
+export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   return (
     <Paper sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}>
-      <IconButton sx={{ p: '10px' }} aria-label="menu">
+      <IconButton sx={{ p: '10px' }} aria-label="menu" onClick={toggleMenu(true)}>
         <Menu />
       </IconButton>
       <InputBase
