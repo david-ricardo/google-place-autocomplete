@@ -8,9 +8,10 @@ const options = {
 
 interface GooglePlacesProps {
   setCenter: Dispatch<google.maps.LatLngLiteral>;
+  setNotFound: Dispatch<boolean>;
 }
 
-const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter }: GooglePlacesProps) => {
+const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter, setNotFound }: GooglePlacesProps) => {
   const input = document.getElementById('place-search-field') as HTMLInputElement;
   const [location, setLocation] = useState<google.maps.places.Autocomplete>(
     new google.maps.places.Autocomplete(input, options),
@@ -27,7 +28,7 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter }: GooglePlacesProps) =
       location.addListener('place_changed', () => {
         const place = location.getPlace();
         if (!place.geometry || !place.geometry.location) {
-          window.alert("No details available for input: '" + place.name + "'");
+          setNotFound(true);
           return;
         }
 
@@ -37,7 +38,7 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter }: GooglePlacesProps) =
         });
       });
     }
-  }, [location, setCenter]);
+  }, [location, setCenter, setNotFound]);
 
   return null;
 };

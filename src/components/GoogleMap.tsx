@@ -1,6 +1,6 @@
 import { FC, useState, useRef, useEffect, cloneElement } from 'react';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMediaQuery, Alert, Snackbar } from '@mui/material';
 import GooglePlaces from './GooglePlaces';
 
 const initialCenter: google.maps.LatLngLiteral = {
@@ -385,6 +385,15 @@ const render = (status: Status) => {
 export const GoogleMap: FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [center, setCenter] = useState<google.maps.LatLngLiteral>(initialCenter);
+  const [notFound, setNotFound] = useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setNotFound(false);
+  };
+
   removeGoogleFont();
   return (
     <div className="flex h-full max-h-72">
@@ -396,13 +405,18 @@ export const GoogleMap: FC = () => {
         <Map
           center={center}
           zoom={17}
-          style={{ flexGrow: '1', height: '100%', minHeight: '50vh' }}
+          style={{ flexGrow: '1', height: '100%', minHeight: '70vh' }}
           styles={prefersDarkMode ? darkTheme : theme}
         >
           <Marker position={center} />
         </Map>
-        <GooglePlaces setCenter={setCenter} />
+        <GooglePlaces setCenter={setCenter} setNotFound={setNotFound} />
       </Wrapper>
+      <Snackbar open={notFound} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          No details available for inputted data!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
