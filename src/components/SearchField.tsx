@@ -11,6 +11,7 @@ interface SearchFieldProps {
 
 export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   const [keyword, setKeyword] = useState<string>('');
+  const inputField = document.getElementById('place-search-field') as HTMLInputElement;
   const deboucedKeyword = useDebounce(keyword);
   const dispatch: Dispatch<any> = useDispatch();
   const { selectedPlace, selectedKeyword } = useSelector((state: RootState) => ({
@@ -30,12 +31,16 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   }, [deboucedKeyword, setSearchHistory]);
 
   useEffect(() => {
-    if (selectedPlace?.formatted_address) setKeyword(selectedPlace.formatted_address);
-  }, [selectedPlace]);
+    if (selectedPlace?.formatted_address) {
+      inputField.value = selectedPlace.formatted_address;
+    }
+  }, [inputField, selectedPlace]);
 
   useEffect(() => {
-    if (selectedKeyword) setKeyword(selectedKeyword);
-  }, [selectedKeyword]);
+    if (selectedKeyword) {
+      inputField.value = selectedKeyword;
+    }
+  }, [inputField, selectedKeyword]);
 
   return (
     <Paper sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}>
@@ -48,7 +53,6 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
         placeholder="Search Google Maps"
         inputProps={{ 'aria-label': 'search google maps' }}
         onChange={(event) => setKeyword(event.target.value)}
-        value={keyword}
         autoFocus
       />
       <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
