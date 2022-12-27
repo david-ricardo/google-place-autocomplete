@@ -9,6 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PlaceIcon from '@mui/icons-material/Place';
 import HistoryIcon from '@mui/icons-material/History';
+import { shallowEqual, useSelector } from 'react-redux';
 
 interface MenuProps {
   openMenu: boolean;
@@ -16,6 +17,8 @@ interface MenuProps {
 }
 
 export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
+  const places: readonly Place[] = useSelector((state: PlaceState) => state.places, shallowEqual);
+
   const list = () => (
     <Box
       sx={{ width: 250 }}
@@ -24,17 +27,13 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
       onKeyDown={toggleMenu(false)}
     >
       <List>
-        {[
-          'Balai Sidang Jakarta Convention Center',
-          'Sydney Opera House',
-          'Suria Jelatek Residence',
-        ].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        {places.map((place) => (
+          <ListItem key={place.id} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <PlaceIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={place.name} />
             </ListItemButton>
           </ListItem>
         ))}

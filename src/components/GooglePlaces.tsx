@@ -1,5 +1,6 @@
-import { useState, useEffect, memo, Dispatch, FC } from 'react';
-import { Place } from '../types';
+import { useState, useEffect, memo, Dispatch, FC, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { addPlace } from '../store/actionCreators';
 
 const options = {
   fields: ['formatted_address', 'geometry', 'name'],
@@ -17,7 +18,9 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter, setNotFound }: GoogleP
   const [location, setLocation] = useState<google.maps.places.Autocomplete>(
     new google.maps.places.Autocomplete(input, options),
   );
-  const [places, setPlaces] = useState<Place[]>([]);
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const savePlace = useCallback((place: Place) => dispatch(addPlace(place)), [dispatch]);
 
   useEffect(() => {
     if (!location) {
@@ -40,19 +43,14 @@ const GooglePlaces: FC<GooglePlacesProps> = ({ setCenter, setNotFound }: GoogleP
         };
 
         setCenter(coordinate);
-        setPlaces([
-          ...places,
-          {
-            coordinate,
-            formatted_address: place.formatted_address,
-            name: place.name,
-          },
-        ]);
+        savePlace({
+          coordinate,
+          formatted_address: place.formatted_address,
+          name: place.name,
+        });
       });
     }
-
-    console.log('places: ', places);
-  }, [location, places, setCenter, setNotFound]);
+  }, [location, savePlace, setCenter, setNotFound]);
 
   return null;
 };
