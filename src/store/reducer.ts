@@ -7,6 +7,7 @@ const initialPlaceState: PlaceState = {
 
 const initialKeywordState: KeywordState = {
   list: [],
+  selected: '',
 };
 
 const placeReducer = (state: PlaceState = initialPlaceState, action: PlaceAction): PlaceState => {
@@ -49,13 +50,18 @@ const keywordReducer = (
         ...state,
         list: updatedKeywords,
       };
+    case actionTypes.SET_SELECTED_KEYWORD:
+      return {
+        ...state,
+        selected: action.keyword,
+      };
   }
   return state;
 };
 
 const rootReducer = combineReducers({
-  places: placeReducer,
-  keywords: keywordReducer,
+  place: placeReducer,
+  keyword: keywordReducer,
 });
 
 export default rootReducer;

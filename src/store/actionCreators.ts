@@ -34,16 +34,26 @@ export function removeKeyword(keyword: string) {
   return keywordRequest(action);
 }
 
+export function setSelectedKeyword(keyword: string) {
+  const action: KeywordAction = {
+    type: actionTypes.SET_SELECTED_KEYWORD,
+    keyword,
+  };
+
+  return keywordRequest(action);
+}
+
 function googlePlaceRequest(action: PlaceAction) {
   return (dispatch: DispatchType) => {
-    setTimeout(() => {
-      dispatch(action);
-    }, 500);
+    dispatch(action);
   };
 }
 
-export function keywordRequest(action: KeywordAction) {
-  return (dispatch: DispatchType) => {
-    dispatch(action);
+function keywordRequest(action: KeywordAction) {
+  return (dispatch: DispatchType, getState: () => RootState) => {
+    const keywordList = getState().keyword.list;
+    if (action.type === actionTypes.SET_SELECTED_KEYWORD || !keywordList.includes(action.keyword)) {
+      dispatch(action);
+    }
   };
 }

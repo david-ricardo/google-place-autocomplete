@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -9,8 +9,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PlaceIcon from '@mui/icons-material/Place';
 import HistoryIcon from '@mui/icons-material/History';
-import { shallowEqual, useSelector } from 'react-redux';
-import { CombinedState } from 'redux';
+import { shallowEqual, useSelector, useDispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import { setSelectedKeyword } from '../store/actionCreators';
 
 interface MenuProps {
   openMenu: boolean;
@@ -18,12 +19,20 @@ interface MenuProps {
 }
 
 export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
-  const { places, keywords }: CombinedState<{ places: Place[]; keywords: string[] }> = useSelector(
-    (state: CombinedState<{ places: PlaceState; keywords: KeywordState }>) => ({
-      places: state.places.list,
-      keywords: state.keywords.list,
+  const { places, keywords } = useSelector(
+    (state: RootState) => ({
+      places: state.place.list,
+      keywords: state.keyword.list,
     }),
     shallowEqual,
+  );
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const handleSelectKeyword = useCallback(
+    (value: string) => {
+      dispatch(setSelectedKeyword(value));
+    },
+    [dispatch],
   );
 
   const list = () => (
@@ -48,7 +57,7 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
       <Divider />
       <List>
         {keywords.map((text, index) => (
-          <ListItem key={index} disablePadding>
+          <ListItem key={index} disablePadding onClick={() => handleSelectKeyword(text)}>
             <ListItemButton>
               <ListItemIcon>
                 <HistoryIcon />

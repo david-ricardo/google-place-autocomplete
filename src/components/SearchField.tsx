@@ -2,7 +2,7 @@ import React, { useEffect, useState, Dispatch, useCallback } from 'react';
 import { Paper, InputBase, Divider, IconButton } from '@mui/material';
 import { Menu, Search, Directions } from '@mui/icons-material';
 import { useDebounce } from '../hooks/useDebouce';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addKeyword } from '../store/actionCreators';
 
 interface SearchFieldProps {
@@ -13,6 +13,7 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   const [keyword, setKeyword] = useState<string>('');
   const deboucedKeyword = useDebounce(keyword);
   const dispatch: Dispatch<any> = useDispatch();
+  const selectedKeyword = useSelector((state: RootState) => state.keyword.selected);
 
   const setSearchHistory = useCallback(
     (value: string) => {
@@ -25,6 +26,10 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
     setSearchHistory(deboucedKeyword);
   }, [deboucedKeyword, setSearchHistory]);
 
+  useEffect(() => {
+    setKeyword(selectedKeyword);
+  }, [selectedKeyword]);
+
   return (
     <Paper sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}>
       <IconButton sx={{ p: '10px' }} aria-label="menu" onClick={toggleMenu(true)}>
@@ -36,7 +41,8 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
         placeholder="Search Google Maps"
         inputProps={{ 'aria-label': 'search google maps' }}
         onChange={(event) => setKeyword(event.target.value)}
-        // onInput={(value) => console.log('value: ', value)}
+        value={keyword}
+        autoFocus
       />
       <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
         <Search />

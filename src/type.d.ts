@@ -16,6 +16,7 @@ type PlaceAction = {
 
 type KeywordState = {
   list: string[];
+  selected: string;
 };
 
 type KeywordAction = {
@@ -24,8 +25,8 @@ type KeywordAction = {
 };
 
 type RootState = {
-  places: PlaceState;
-  keywords: KeywordState;
+  place: PlaceState;
+  keyword: KeywordState;
 };
 
 type RootAction = PlaceAction | KeywordAction;
