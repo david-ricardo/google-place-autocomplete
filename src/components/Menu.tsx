@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PlaceIcon from '@mui/icons-material/Place';
 import HistoryIcon from '@mui/icons-material/History';
 import { shallowEqual, useSelector } from 'react-redux';
+import { CombinedState } from 'redux';
 
 interface MenuProps {
   openMenu: boolean;
@@ -17,7 +18,13 @@ interface MenuProps {
 }
 
 export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
-  const places: readonly Place[] = useSelector((state: PlaceState) => state.places, shallowEqual);
+  const { places, keywords }: CombinedState<{ places: Place[]; keywords: string[] }> = useSelector(
+    (state: CombinedState<{ places: PlaceState; keywords: KeywordState }>) => ({
+      places: state.places.list,
+      keywords: state.keywords.list,
+    }),
+    shallowEqual,
+  );
 
   const list = () => (
     <Box
@@ -40,18 +47,16 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
       </List>
       <Divider />
       <List>
-        {['Jakarta', 'Sydney', 'suria jelatek residence', 'restaurant terdekat'].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <HistoryIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ),
-        )}
+        {keywords.map((text, index) => (
+          <ListItem key={index} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <HistoryIcon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
     </Box>
   );

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Dispatch, useCallback } from 'react';
 import { Paper, InputBase, Divider, IconButton } from '@mui/material';
 import { Menu, Search, Directions } from '@mui/icons-material';
 import { useDebounce } from '../hooks/useDebouce';
+import { useDispatch } from 'react-redux';
+import { addKeyword } from '../store/actionCreators';
 
 interface SearchFieldProps {
   toggleMenu: (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => void;
@@ -9,16 +11,19 @@ interface SearchFieldProps {
 
 export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   const [keyword, setKeyword] = useState<string>('');
-  const [searchHistories, setSearcHistories] = useState<string[]>([]);
-  const deboucedValue = useDebounce(keyword);
+  const deboucedKeyword = useDebounce(keyword);
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const setSearchHistory = useCallback(
+    (value: string) => {
+      dispatch(addKeyword(value));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
-    setSearcHistories((state) => [...state, deboucedValue].filter(String));
-  }, [deboucedValue]);
-
-  useEffect(() => {
-    console.log('searchHistories: ', searchHistories);
-  }, [searchHistories]);
+    setSearchHistory(deboucedKeyword);
+  }, [deboucedKeyword, setSearchHistory]);
 
   return (
     <Paper sx={{ p: '2px 4px', display: 'flex', alignItems: 'center' }}>

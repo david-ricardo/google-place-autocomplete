@@ -1,30 +1,61 @@
+import { combineReducers } from 'redux';
 import * as actionTypes from './actionTypes';
 
-const initialState: PlaceState = {
-  places: [],
+const initialPlaceState: PlaceState = {
+  list: [],
 };
 
-const reducer = (state: PlaceState = initialState, action: PlaceAction): PlaceState => {
+const initialKeywordState: KeywordState = {
+  list: [],
+};
+
+const placeReducer = (state: PlaceState = initialPlaceState, action: PlaceAction): PlaceState => {
   switch (action.type) {
     case actionTypes.ADD_PLACE:
       const newPlace: Place = {
-        id: state.places.length + 1,
+        id: state.list.length + 1,
         name: action.place.name,
         formatted_address: action.place.formatted_address,
         coordinate: action.place.coordinate,
       };
       return {
         ...state,
-        places: state.places.concat(newPlace),
+        list: state.list.concat(newPlace),
       };
     case actionTypes.REMOVE_PLACE:
-      const updatedPlaces: Place[] = state.places.filter((place) => place.id !== action.place.id);
+      const updatedPlaces: Place[] = state.list.filter((place) => place.id !== action.place.id);
       return {
         ...state,
-        places: updatedPlaces,
+        list: updatedPlaces,
       };
   }
   return state;
 };
 
-export default reducer;
+const keywordReducer = (
+  state: KeywordState = initialKeywordState,
+  action: KeywordAction,
+): KeywordState => {
+  switch (action.type) {
+    case actionTypes.ADD_KEYWORD:
+      const newKeyword: string = action.keyword;
+      return {
+        ...state,
+        list: state.list.concat(newKeyword).filter(String),
+      };
+    case actionTypes.REMOVE_KEYWORD:
+      const updatedKeywords: string[] = state.list.filter((keyword) => keyword !== action.keyword);
+      return {
+        ...state,
+        list: updatedKeywords,
+      };
+  }
+  return state;
+};
+
+const rootReducer = combineReducers({
+  places: placeReducer,
+  keywords: keywordReducer,
+});
+
+export default rootReducer;

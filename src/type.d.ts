@@ -6,7 +6,7 @@ interface Place {
 }
 
 type PlaceState = {
-  places: Place[];
+  list: Place[];
 };
 
 type PlaceAction = {
@@ -14,4 +14,20 @@ type PlaceAction = {
   place: Place;
 };
 
-type DispatchType = (args: PlaceAction) => PlaceAction;
+type KeywordState = {
+  list: string[];
+};
+
+type KeywordAction = {
+  type: string;
+  keyword: string;
+};
+
+type RootState = {
+  places: PlaceState;
+  keywords: KeywordState;
+};
+
+type RootAction = PlaceAction | KeywordAction;
+
+type DispatchType = (args: PlaceAction | KeywordAction) => PlaceAction | KeywordAction;

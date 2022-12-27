@@ -17,10 +17,33 @@ export function removePlace(place: Place) {
   return googlePlaceRequest(action);
 }
 
-export function googlePlaceRequest(action: PlaceAction) {
+export function addKeyword(keyword: string) {
+  const action: KeywordAction = {
+    type: actionTypes.ADD_KEYWORD,
+    keyword,
+  };
+
+  return keywordRequest(action);
+}
+
+export function removeKeyword(keyword: string) {
+  const action: KeywordAction = {
+    type: actionTypes.REMOVE_KEYWORD,
+    keyword,
+  };
+  return keywordRequest(action);
+}
+
+function googlePlaceRequest(action: PlaceAction) {
   return (dispatch: DispatchType) => {
     setTimeout(() => {
       dispatch(action);
     }, 500);
+  };
+}
+
+export function keywordRequest(action: KeywordAction) {
+  return (dispatch: DispatchType) => {
+    dispatch(action);
   };
 }

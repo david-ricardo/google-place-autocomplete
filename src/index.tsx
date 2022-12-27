@@ -10,7 +10,7 @@ import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-const store: Store<PlaceState, PlaceAction> & {
+const store: Store<RootState, RootAction> & {
   dispatch: DispatchType;
 } = createStore(reducer, applyMiddleware(thunk));
 
