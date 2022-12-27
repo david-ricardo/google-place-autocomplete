@@ -6,7 +6,7 @@ export function addPlace(place: Place) {
     place,
   };
 
-  return googlePlaceRequest(action);
+  return googlePlaceDispatcher(action);
 }
 
 export function removePlace(place: Place) {
@@ -14,7 +14,7 @@ export function removePlace(place: Place) {
     type: actionTypes.REMOVE_PLACE,
     place,
   };
-  return googlePlaceRequest(action);
+  return googlePlaceDispatcher(action);
 }
 
 export function addKeyword(keyword: string) {
@@ -23,7 +23,7 @@ export function addKeyword(keyword: string) {
     keyword,
   };
 
-  return keywordRequest(action);
+  return keywordDispatcher(action);
 }
 
 export function removeKeyword(keyword: string) {
@@ -31,7 +31,7 @@ export function removeKeyword(keyword: string) {
     type: actionTypes.REMOVE_KEYWORD,
     keyword,
   };
-  return keywordRequest(action);
+  return keywordDispatcher(action);
 }
 
 export function setSelectedKeyword(keyword: string) {
@@ -40,16 +40,20 @@ export function setSelectedKeyword(keyword: string) {
     keyword,
   };
 
-  return keywordRequest(action);
+  return keywordDispatcher(action);
 }
 
-function googlePlaceRequest(action: PlaceAction) {
-  return (dispatch: DispatchType) => {
-    dispatch(action);
+function googlePlaceDispatcher(action: PlaceAction) {
+  return (dispatch: DispatchType, getState: () => RootState) => {
+    const placeList = getState().place.list;
+    const placeNameList = placeList.map((place) => place.name);
+    if (!placeNameList.includes(action.place.name)) {
+      dispatch(action);
+    }
   };
 }
 
-function keywordRequest(action: KeywordAction) {
+function keywordDispatcher(action: KeywordAction) {
   return (dispatch: DispatchType, getState: () => RootState) => {
     const keywordList = getState().keyword.list;
     if (action.type === actionTypes.SET_SELECTED_KEYWORD || !keywordList.includes(action.keyword)) {
