@@ -43,29 +43,37 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
       onKeyDown={toggleMenu(false)}
     >
       <List>
-        {places.map((place) => (
-          <ListItem key={place.id} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <PlaceIcon />
-              </ListItemIcon>
-              <ListItemText primary={place.name} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {places.length ? (
+          places.map((place) => (
+            <ListItem key={place.id} disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <PlaceIcon />
+                </ListItemIcon>
+                <ListItemText primary={place.name} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        ) : (
+          <p className="center-text">No location history</p>
+        )}
       </List>
       <Divider />
       <List>
-        {keywords.map((text, index) => (
-          <ListItem key={index} disablePadding onClick={() => handleSelectKeyword(text)}>
-            <ListItemButton>
-              <ListItemIcon>
-                <HistoryIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {keywords.length ? (
+          keywords.map((text, index) => (
+            <ListItem key={index} disablePadding onClick={() => handleSelectKeyword(text)}>
+              <ListItemButton>
+                <ListItemIcon>
+                  <HistoryIcon />
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))
+        ) : (
+          <p className="center-text">No keyword history</p>
+        )}
       </List>
     </Box>
   );
