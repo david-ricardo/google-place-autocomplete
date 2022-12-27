@@ -17,6 +17,15 @@ export function removePlace(place: Place) {
   return googlePlaceDispatcher(action);
 }
 
+export function setSelectedPlace(place: Place) {
+  const action: PlaceAction = {
+    type: actionTypes.SET_SELECTED_PLACE,
+    place,
+  };
+
+  return googlePlaceDispatcher(action);
+}
+
 export function addKeyword(keyword: string) {
   const action: KeywordAction = {
     type: actionTypes.ADD_KEYWORD,
@@ -47,7 +56,10 @@ function googlePlaceDispatcher(action: PlaceAction) {
   return (dispatch: DispatchType, getState: () => RootState) => {
     const placeList = getState().place.list;
     const placeNameList = placeList.map((place) => place.name);
-    if (!placeNameList.includes(action.place.name)) {
+    if (
+      action.type === actionTypes.SET_SELECTED_PLACE ||
+      !placeNameList.includes(action.place.name)
+    ) {
       dispatch(action);
     }
   };

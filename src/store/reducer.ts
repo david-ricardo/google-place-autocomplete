@@ -29,6 +29,11 @@ const placeReducer = (state: PlaceState = initialPlaceState, action: PlaceAction
         ...state,
         list: updatedPlaces,
       };
+    case actionTypes.SET_SELECTED_PLACE:
+      return {
+        ...state,
+        selected: action.place,
+      };
   }
   return state;
 };

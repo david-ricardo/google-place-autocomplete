@@ -11,7 +11,7 @@ import PlaceIcon from '@mui/icons-material/Place';
 import HistoryIcon from '@mui/icons-material/History';
 import { shallowEqual, useSelector, useDispatch } from 'react-redux';
 import { Dispatch } from 'redux';
-import { setSelectedKeyword } from '../store/actionCreators';
+import { setSelectedPlace, setSelectedKeyword } from '../store/actionCreators';
 
 interface MenuProps {
   openMenu: boolean;
@@ -27,6 +27,13 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
     shallowEqual,
   );
   const dispatch: Dispatch<any> = useDispatch();
+
+  const handleSelectPlace = useCallback(
+    (value: Place) => {
+      dispatch(setSelectedPlace(value));
+    },
+    [dispatch],
+  );
 
   const handleSelectKeyword = useCallback(
     (value: string) => {
@@ -45,7 +52,7 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
       <List>
         {places.length ? (
           places.map((place) => (
-            <ListItem key={place.id} disablePadding>
+            <ListItem key={place.id} disablePadding onClick={() => handleSelectPlace(place)}>
               <ListItemButton>
                 <ListItemIcon>
                   <PlaceIcon />

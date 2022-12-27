@@ -7,6 +7,7 @@ interface Place {
 
 type PlaceState = {
   list: Place[];
+  selected?: Place;
 };
 
 type PlaceAction = {

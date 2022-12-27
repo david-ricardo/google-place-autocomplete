@@ -13,7 +13,10 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   const [keyword, setKeyword] = useState<string>('');
   const deboucedKeyword = useDebounce(keyword);
   const dispatch: Dispatch<any> = useDispatch();
-  const selectedKeyword = useSelector((state: RootState) => state.keyword.selected);
+  const { selectedPlace, selectedKeyword } = useSelector((state: RootState) => ({
+    selectedPlace: state.place.selected,
+    selectedKeyword: state.keyword.selected,
+  }));
 
   const setSearchHistory = useCallback(
     (value: string) => {
@@ -27,7 +30,11 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
   }, [deboucedKeyword, setSearchHistory]);
 
   useEffect(() => {
-    setKeyword(selectedKeyword);
+    if (selectedPlace?.formatted_address) setKeyword(selectedPlace.formatted_address);
+  }, [selectedPlace]);
+
+  useEffect(() => {
+    if (selectedKeyword) setKeyword(selectedKeyword);
   }, [selectedKeyword]);
 
   return (

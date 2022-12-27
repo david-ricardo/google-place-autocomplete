@@ -2,6 +2,7 @@ import { FC, useState, useRef, useEffect, cloneElement } from 'react';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import { useMediaQuery, Alert, Snackbar } from '@mui/material';
 import GooglePlaces from './GooglePlaces';
+import { shallowEqual, useSelector } from 'react-redux';
 
 const initialCenter: google.maps.LatLngLiteral = {
   lat: -6.217939210899108,
@@ -386,6 +387,13 @@ export const GoogleMap: FC = () => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [center, setCenter] = useState<google.maps.LatLngLiteral>(initialCenter);
   const [notFound, setNotFound] = useState(false);
+  const selectedPlace = useSelector((state: RootState) => state.place.selected, shallowEqual);
+
+  useEffect(() => {
+    if (selectedPlace) {
+      setCenter(selectedPlace.coordinate);
+    }
+  }, [selectedPlace]);
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
