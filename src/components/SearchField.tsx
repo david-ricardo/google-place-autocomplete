@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Dispatch, useCallback } from 'react';
-import { Paper, InputBase, Divider, IconButton } from '@mui/material';
-import { Menu, Search, Directions } from '@mui/icons-material';
+import { Paper, InputBase, IconButton } from '@mui/material';
+import { Menu, Search } from '@mui/icons-material';
 import { useDebounce } from '../hooks/useDebouce';
 import { useDispatch, useSelector } from 'react-redux';
 import { addKeyword } from '../store/actionCreators';
@@ -57,10 +57,6 @@ export const SearchField = ({ toggleMenu }: SearchFieldProps) => {
       />
       <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
         <Search />
-      </IconButton>
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-      <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions">
-        <Directions />
       </IconButton>
     </Paper>
   );
