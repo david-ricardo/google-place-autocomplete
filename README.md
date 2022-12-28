@@ -7,6 +7,7 @@ Live Demo: https://david-ricardo-maps.vercel.app
 - [Redux](https://redux.js.org/)
 - [Redux Thunk](https://github.com/reduxjs/redux-thunk)
 - [Material UI](https://mui.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
 - [Google Place Autocomplete](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete)
 
 ## Available Scripts

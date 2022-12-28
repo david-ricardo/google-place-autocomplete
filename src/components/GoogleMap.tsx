@@ -404,7 +404,7 @@ export const GoogleMap: FC = () => {
 
   removeGoogleFont();
   return (
-    <div className="flex h-full max-h-72">
+    <>
       <Wrapper
         apiKey={'AIzaSyAet8Mk1nPvOn_AebLE5ZxXoGejOD8tPzA'}
         libraries={['places']}
@@ -425,7 +425,7 @@ export const GoogleMap: FC = () => {
           No details available for inputted data!
         </Alert>
       </Snackbar>
-    </div>
+    </>
   );
 };
 
