@@ -62,7 +62,7 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
             </ListItem>
           ))
         ) : (
-          <p className="center-text">No location history</p>
+          <p className="text-center">No location history</p>
         )}
       </List>
       <Divider />
@@ -79,7 +79,7 @@ export const Menu = ({ openMenu, toggleMenu }: MenuProps) => {
             </ListItem>
           ))
         ) : (
-          <p className="center-text">No keyword history</p>
+          <p className="text-center">No keyword history</p>
         )}
       </List>
     </Box>
