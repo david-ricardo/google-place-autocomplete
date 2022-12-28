@@ -18,19 +18,17 @@ const App = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <Container>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <SearchField toggleMenu={toggleMenu} />
-            </Grid>
-            <Grid item xs={12}>
-              <GoogleMap />
-            </Grid>
+      <Container>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <SearchField toggleMenu={toggleMenu} />
           </Grid>
-          <Menu openMenu={openMenu} toggleMenu={toggleMenu} />
-        </Container>
-      </header>
+          <Grid item xs={12}>
+            <GoogleMap />
+          </Grid>
+        </Grid>
+        <Menu openMenu={openMenu} toggleMenu={toggleMenu} />
+      </Container>
     </div>
   );
 };
